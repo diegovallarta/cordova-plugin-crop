@@ -14,6 +14,8 @@
     NSString *imagePath = [command.arguments objectAtIndex:0];
     NSDictionary *options = [command.arguments objectAtIndex:1];
     id quality = options[@"quality"] ?: @100;
+    BOOL forceRatio = [options[@"forceRatio"] boolValue] ?: false;
+    NSString *aspectRatio = (NSString *)options[@"aspectRatio"];
     
     self.quality = [quality unsignedIntegerValue];
     NSString *filePrefix = @"file://";
@@ -44,10 +46,26 @@
     cropController.rotationEnabled = NO;
     
     // TODO parameterize this
-    cropController.imageCropRect = CGRectMake((width - length) / 2,
-                                          (height - length) / 2,
-                                          length,
-                                          length);
+    if ([aspectRatio isEqualToString:@"square"]) {
+        cropController.imageCropRect = CGRectMake((width - length) / 2,
+                                                  (height - length) / 2,
+                                                  length,
+                                                  length);
+    } else if ([aspectRatio isEqualToString:@"3:4"]) {
+        cropController.imageCropRect = CGRectMake(0,
+                                                  0,
+                                                  width,
+                                                  height*0.75);
+    } else if ([aspectRatio isEqualToString:@"16:9"]) {
+        cropController.imageCropRect = CGRectMake(0,
+                                                  0,
+                                                  width,
+                                                  height*(16/9));
+    }
+    
+    if(forceRatio){
+        cropController.keepingCropAspectRatio = YES;
+    }
     
     self.callbackId = command.callbackId;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropController];
