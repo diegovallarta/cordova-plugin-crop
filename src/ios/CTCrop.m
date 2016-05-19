@@ -55,12 +55,12 @@
         cropController.imageCropRect = CGRectMake(0,
                                                   0,
                                                   width,
-                                                  height*0.75);
+                                                  length*0.75);
     } else if ([aspectRatio isEqualToString:@"16:9"]) {
         cropController.imageCropRect = CGRectMake(0,
                                                   0,
                                                   width,
-                                                  height*(16/9));
+                                                  length*(16/9));
     }
     
     if(forceRatio){
