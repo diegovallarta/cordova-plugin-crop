@@ -51,16 +51,27 @@
                                                   (height - length) / 2,
                                                   length,
                                                   length);
+        
     } else if ([aspectRatio isEqualToString:@"3:4"]) {
         cropController.imageCropRect = CGRectMake(0,
                                                   0,
                                                   width,
                                                   length*0.75);
+        
     } else if ([aspectRatio isEqualToString:@"16:9"]) {
-        cropController.imageCropRect = CGRectMake(0,
-                                                  0,
-                                                  width,
-                                                  length*(16/9));
+        float calculatedRatio = length * 1.7777;
+        if(calculatedRatio > height){
+            cropController.imageCropRect = CGRectMake(0,
+                                                      0,
+                                                      calculatedRatio,
+                                                      length);
+        } else {
+            cropController.imageCropRect = CGRectMake(0,
+                                                      0,
+                                                      width,
+                                                      calculatedRatio);
+        }
+        
     }
     
     if(forceRatio){
